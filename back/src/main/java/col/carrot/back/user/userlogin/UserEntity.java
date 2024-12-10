@@ -1,4 +1,4 @@
-package col.carrot.back.user;
+package col.carrot.back.user.userlogin;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,5 +14,7 @@ public class UserEntity {
     @Id
     private Long id;
 
+    private String userId;
+    private String password;
     private String nickname;
 }
