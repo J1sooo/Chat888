@@ -2,6 +2,7 @@ package col.carrot.back.user.userlogin;
 
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.Optional;
 
 @Service
@@ -20,31 +21,26 @@ public class UserService {
         return userRepository.existsByUserId(userId);
     }
 
-    /*
-    회원가입
-     */
-    public void join() {
-        userRepository.save(new UserEntity());
-    }
 
-    /*
-    로그인
-     */
-    public UserEntity login() {
-        Optional<UserEntity> user = userRepository.findByUserId(login().getUserId());
+//    /*
+//    로그인
+//     */
+//    public UserEntity login(String userId) {
+//        Optional<UserEntity> user = userRepository.findByUserId(login().getUserId());
+//
+//        //id가 없으면 null
+//        if(user.isEmpty()) {
+//            return null;
+//        }
+//
+//        UserEntity userEntity = user.get();
+//
+//        //user의 비밀번호가 틀리면 null
+//        if (!userEntity.getPassword().equals(login().getPassword())) {
+//            return null;
+//        }
+//
+//        return userEntity;
+//    }
 
-        //id가 없으면 null
-        if(user.isEmpty()) {
-            return null;
-        }
-
-        UserEntity userEntity = user.get();
-
-        //user의 비밀번호가 틀리면 null
-        if (!userEntity.getPassword().equals(login().getPassword())) {
-            return null;
-        }
-
-        return userEntity;
-    }
 }
