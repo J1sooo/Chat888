@@ -15,32 +15,32 @@ public class UserService {
     }
 
     /*
-     * 로그인 처리
-     * 성공시 UserEntity 반환, 실패시 null 반환
+    Id 중복체크
      */
-    public UserEntity login(String userId, String password) {
-        Optional<UserEntity> user = userRepository.findByUserId(userId);
-        
-        // 사용자가 존재하지 않는 경우
-        if (user.isEmpty()) {
-            return null;
-        }
-
-        UserEntity userEntity = user.get();
-        
-        // 비밀번호가 일치하지 않는 경우
-        if (!userEntity.getPassword().equals(password)) {
-            return null;
-        }
-
-        return userEntity;
-    }
-
-    /*
-     * Id 중복체크
-     */
-    public boolean existLogin(String userId) {
+    public boolean existLogin(String userId){
         return userRepository.existsByUserId(userId);
     }
+
+
+//    /*
+//    로그인
+//     */
+//    public UserEntity login(String userId) {
+//        Optional<UserEntity> user = userRepository.findByUserId(login().getUserId());
+//
+//        //id가 없으면 null
+//        if(user.isEmpty()) {
+//            return null;
+//        }
+//
+//        UserEntity userEntity = user.get();
+//
+//        //user의 비밀번호가 틀리면 null
+//        if (!userEntity.getPassword().equals(login().getPassword())) {
+//            return null;
+//        }
+//
+//        return userEntity;
+//    }
 
 }
