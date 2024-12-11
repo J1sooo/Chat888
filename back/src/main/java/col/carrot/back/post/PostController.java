@@ -8,8 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class PostController {
     final private PostService postService;
     final private FileUploadService fileUploadService;
@@ -19,7 +20,7 @@ public class PostController {
         this.fileUploadService = fileUploadService;
     }
 
-    @PostMapping("createPost")
+    @PostMapping("/createPost")
     public PostEntity createPost(@RequestBody PostEntity Post){
         return postService.createPost(Post);
     }
