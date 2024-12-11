@@ -5,9 +5,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import col.carrot.back.user.UserEntity;
-import col.carrot.back.user.UserRepository;
 import col.carrot.back.user.kakaoLogin.domain.KakaoUserInfoResoponseDto;
+import col.carrot.back.user.userlogin.UserEntity;
+import col.carrot.back.user.userlogin.UserRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
