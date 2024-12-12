@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 function ListPage() {
     const [posts, setPosts] = useState([]);
@@ -24,8 +25,10 @@ function ListPage() {
             <div className="posts-container">
                 {posts.map((post) => (
                     <div key={post.id} className="post-item">
-                        <h2>{post.title}</h2>
-                        <p>{post.content}</p>
+                        <Link to={`/postDetail/${post.id}`}>
+                            <h2>{post.title}</h2>
+                            <p>{post.content}</p>
+                        </Link>
                         {/*{post.imageUrl && <img src={post.imageUrl} alt="게시물 이미지" />}*/}
                     </div>
                 ))}
