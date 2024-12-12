@@ -5,10 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("")
 public class PostController {
@@ -21,17 +21,25 @@ public class PostController {
     }
 
     @PostMapping("/createPost")
-    public PostEntity createPost(@RequestBody PostEntity Post){
+    public PostEntity createPost(@RequestBody PostEntity Post) {
         return postService.createPost(Post);
     }
+
     @GetMapping("/postAll")
-    public List<PostEntity> allPost(){
+    public List<PostEntity> allPost() {
         return postService.allPost();
     }
+
     @DeleteMapping("/delete/{id}")
-    public void deletePost(@PathVariable Integer id){
+    public void deletePost(@PathVariable Integer id) {
         postService.deletePost(id);
     }
+
+    @GetMapping("/findPost/{id}")
+    public Optional<PostEntity> findPost(@PathVariable Integer id) {
+        return postService.findPost(id);
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
