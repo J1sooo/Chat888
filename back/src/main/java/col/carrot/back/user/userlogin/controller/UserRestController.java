@@ -13,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,18 +21,23 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserRestController {
     private final Logger log = LoggerFactory.getLogger(UserRestController.class);
     private final UserRepository userRepository;
 
-    @PostMapping(path = "/login", consumes = {"application/josn"})
+    @PostMapping(path = "/login")
     public ResponseData login(@RequestBody LoginData loginData, HttpServletRequest request) throws Exception {
         this.log.debug("" + loginData);
         String userId = loginData.getUserId();
-        String passwrod = loginData.getUserPwd();
+        String password = loginData.getUserPwd();
         Optional<UserEntity> user = this.userRepository.findByUserId(userId);
         if(user.isEmpty()) {
             return new ResponseData(false, "유저가 존재하지 않습니다");
+        }
+        UserEntity userEntity = user.get();
+        if (!userEntity.getPassword().equals(password)) {
+            return new ResponseData(false,"비밀번호가 틀렸습니다");
         }
 
         HttpSession session = request.getSession(true);
@@ -39,7 +45,7 @@ public class UserRestController {
         return new ResponseData(true,"로그인 되었습니다");
     }
 
-    @PostMapping(path = "/join",consumes = {"application/json"})
+    @PostMapping(path = "/join")
     public ResponseData join(@RequestBody UserEntity userEntity, Errors errors) {
         this.log.debug("" + userEntity);
         this.log.debug(userEntity == null ? "null" : userEntity.toString());
@@ -59,7 +65,7 @@ public class UserRestController {
             return new ResponseData(false,"이미 존재하는 ID입니다.");
         }
 
-        this.userRepository.save(userEntity);
+        //this.userRepository.save(userEntity);
 
         return new ResponseData(true,"회원가입에 성공하셨습니다!");
     }
