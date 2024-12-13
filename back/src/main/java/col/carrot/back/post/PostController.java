@@ -55,4 +55,14 @@ public class PostController {
                     .body("파일 업로드 실패: " + e.getMessage());
         }
     }
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<PostEntity> modifyPost(@PathVariable Integer id, @RequestBody PostEntity post) {
+        try {
+            PostEntity modifyPost = postService.modifyPost(id, post);
+            return ResponseEntity.ok(modifyPost);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

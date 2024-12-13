@@ -22,15 +22,26 @@ public class PostService {
         post.setContent(postDto.getContent());
         return postRepository.save(post);
     }
-    public List<PostEntity> allPost(){
+
+    public List<PostEntity> allPost() {
         return postRepository.findAll();
     }
 
-    public void deletePost(Integer id){
+    public void deletePost(Integer id) {
         postRepository.deleteById(id);
     }
 
-    public Optional<PostEntity> findPost(Integer id){
+    public Optional<PostEntity> findPost(Integer id) {
         return postRepository.findById(id);
+    }
+
+    public PostEntity modifyPost(Integer id, PostEntity postDto) {
+        return postRepository.findById(id)
+                .map(existingPost -> {
+                    existingPost.setTitle(postDto.getTitle());
+                    existingPost.setContent(postDto.getContent());
+                    return postRepository.save(existingPost);
+                })
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. id: " + id));
     }
 }
