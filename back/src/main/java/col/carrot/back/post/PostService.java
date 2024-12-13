@@ -47,7 +47,7 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public PostEntity modifyPost(Integer id, String title, String content,Integer price, MultipartFile file) throws IOException {
+    public PostEntity modifyPost(Integer id, String title, String content, Integer price, MultipartFile file) throws IOException {
         PostEntity postDto = new PostEntity();
         postDto.setTitle(title);
         postDto.setContent(content);
@@ -64,6 +64,7 @@ public class PostService {
                     existingPost.setTitle(postDto.getTitle());
                     existingPost.setContent(postDto.getContent());
                     existingPost.setImageUrl(postDto.getImageUrl());
+                    existingPost.setPrice(postDto.getPrice());
                     return postRepository.save(existingPost);
                 })
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. id: " + id));
