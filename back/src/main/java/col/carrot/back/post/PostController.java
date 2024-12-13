@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +22,20 @@ public class PostController {
     }
 
     @PostMapping("/createPost")
-    public PostEntity createPost(@RequestBody PostEntity Post) {
-        return postService.createPost(Post);
+public ResponseEntity<?> createPost(
+        @RequestParam("title") String title,
+        @RequestParam("content") String content,
+        @RequestParam("price") Integer price,
+        @RequestParam(value = "file", required = false) MultipartFile file) {
+    try {
+        PostEntity savedPost = postService.createPost(title, content,price, file);
+        return ResponseEntity.ok(savedPost);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("게시물 생성 실패: " + e.getMessage());
     }
+}
 
     @GetMapping("/postAll")
     public List<PostEntity> allPost() {
@@ -39,30 +51,20 @@ public class PostController {
     public Optional<PostEntity> findPost(@PathVariable Integer id) {
         return postService.findPost(id);
     }
-
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            if (file.isEmpty()) {
-                return ResponseEntity.badRequest().body("파일이 비어있습니다.");
-            }
-            String bucketName = "chat888"; // application.properties에서 설정한 버킷 이름과 동일해야 함
-            String result = fileUploadService.uploadFile(file, bucketName);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace(); // 콘솔에 상세한 에러 로그 출력
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("파일 업로드 실패: " + e.getMessage());
-        }
-    }
-
-    @PutMapping("/modify/{id}")
-    public ResponseEntity<PostEntity> modifyPost(@PathVariable Integer id, @RequestBody PostEntity post) {
-        try {
-            PostEntity modifyPost = postService.modifyPost(id, post);
-            return ResponseEntity.ok(modifyPost);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+@PutMapping("/modify/{id}")
+public ResponseEntity<PostEntity> modifyPost(
+    @PathVariable Integer id,
+    @RequestParam("title") String title,
+    @RequestParam("content") String content,
+    @RequestParam("price") Integer price,
+    @RequestParam(value = "file", required = false) MultipartFile file
+) {
+    try {
+        PostEntity modifiedPost = postService.modifyPost(id, title, content, price, file);
+        return ResponseEntity.ok(modifiedPost);
+    } catch (IOException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+}
+

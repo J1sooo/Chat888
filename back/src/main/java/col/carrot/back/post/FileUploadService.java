@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 
 @Service
@@ -23,16 +24,18 @@ public class FileUploadService {
     }
 
     public String uploadFile(MultipartFile file, String bucketName) throws IOException {
-        String key = Paths.get(file.getOriginalFilename()).getFileName().toString();
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(key)
+                .key(fileName)
+                .contentType(file.getContentType())
                 .build();
 
-        PutObjectResponse response = s3Client.putObject(putObjectRequest, 
+        s3Client.putObject(putObjectRequest, 
                 RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        return key;
+        // S3 파일 URL 반환
+        return String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
     }
 } 
