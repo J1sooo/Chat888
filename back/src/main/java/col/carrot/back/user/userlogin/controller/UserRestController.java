@@ -4,13 +4,10 @@ import col.carrot.back.user.userlogin.UserEntity;
 import col.carrot.back.user.userlogin.UserRepository;
 import col.carrot.back.user.userlogin.data.LoginData;
 import col.carrot.back.user.userlogin.data.ResponseData;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +24,7 @@ public class UserRestController {
     private final UserRepository userRepository;
 
     @PostMapping(path = "/login")
-    public ResponseData login(@RequestBody LoginData loginData, HttpServletRequest request) {
+    public ResponseData login(@RequestBody LoginData loginData, HttpSession session) {
         String userId = loginData.getUserId();
         String password = loginData.getPassword();
         Optional<UserEntity> user = this.userRepository.findByUserId(userId);
@@ -39,7 +36,6 @@ public class UserRestController {
             return new ResponseData(false, "비밀번호가 틀렸습니다");
         }
 
-        HttpSession session = request.getSession(true);
         session.setAttribute("userId", userId);
         return new ResponseData(true, "로그인 되었습니다");
     }
