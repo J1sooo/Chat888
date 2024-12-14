@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -64,4 +66,14 @@ public class UserRestController {
         return new ResponseData(true, "회원가입에 성공하셨습니다!");
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        return "로그아웃 성공";
+    }
+
+    @GetMapping("/checkLogin")
+    public String checkLogin(HttpSession session) {
+        return (String) session.getAttribute("userId");
+    }
 }
