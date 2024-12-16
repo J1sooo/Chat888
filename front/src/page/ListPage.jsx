@@ -29,7 +29,7 @@ function ListPage() {
                             <h2>{post.title}</h2>
                             <p>{post.content}</p>
                         </Link>
-                        {/*{post.imageUrl && <img src={post.imageUrl} alt="게시물 이미지" />}*/}
+                        {post.imageUrl && <img src={post.imageUrl} alt="게시물 이미지" />}
                     </div>
                 ))}
             </div>

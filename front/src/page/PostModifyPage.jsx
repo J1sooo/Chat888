@@ -5,8 +5,12 @@ import axios from "axios";
 function PostModifyPage() {
     const [postDetail, setPostDetail] = useState({
         title: '',
-        content: ''
+        content: '',
+        price: '',
+        imageUrl: ''
     });
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState('');
     const {postId} = useParams();
     const navigate = useNavigate();
 
@@ -15,6 +19,9 @@ function PostModifyPage() {
             try {
                 const response = await axios.get(`http://localhost:8080/findPost/${postId}`);
                 setPostDetail(response.data);
+                if (response.data.imageUrl) {
+                    setPreview(response.data.imageUrl);
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -30,15 +37,50 @@ function PostModifyPage() {
         }));
     };
 
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreview(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        } else {
+            setPreview(postDetail.imageUrl || '');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('title', postDetail.title);
+        formData.append('content', postDetail.content);
+        formData.append('price', parseInt(postDetail.price));
+        if (file) {
+            formData.append('file', file);
+        }
+
         try {
-            await axios.put(`http://localhost:8080/modify/${postId}`, postDetail);
-            alert('게시물이 수정되었습니다.');
-            navigate(`/postDetail/${postId}`);
+            const response = await axios.put(
+                `http://localhost:8080/modify/${postId}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+
+            if (response.data) {
+                alert('게시물이 수정되었습니다.');
+                navigate(`/postDetail/${postId}`);
+            }
         } catch (error) {
             console.error('수정 실패:', error);
-            alert('게시물 수정에 실패했습니다.');
+            alert('게시물 수정에 실패했습니다: ' + (error.response?.data || error.message));
         }
     };
 
@@ -77,6 +119,43 @@ function PostModifyPage() {
                                         fontSize: '16px'
                                     }}
                                 />
+                                <h1>가격</h1>
+                                <input
+                                    type="number"
+                                    name="price"
+                                    value={postDetail.price || ''}
+                                    onChange={handleChange}
+                                    style={{
+                                        width: '100%',
+                                        padding: '8px',
+                                        marginBottom: '20px',
+                                        fontSize: '16px'
+                                    }}
+                                />
+                                <div style={{marginBottom: '20px'}}>
+                                    <h1>이미지</h1>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        style={{marginBottom: '10px'}}
+                                    />
+                                    {preview && (
+                                        <div>
+                                            <h3>이미지 미리보기</h3>
+                                            <img
+                                                src={preview}
+                                                alt="미리보기"
+                                                style={{
+                                                    maxWidth: '300px',
+                                                    maxHeight: '300px',
+                                                    objectFit: 'contain',
+                                                    marginTop: '10px'
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <button
                                 type="submit"
@@ -89,7 +168,7 @@ function PostModifyPage() {
                                     cursor: 'pointer'
                                 }}
                             >
-                                수정 완료
+                                수정
                             </button>
                         </>
                     ) : (

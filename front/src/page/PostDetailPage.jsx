@@ -35,9 +35,27 @@ function PostDetailPage() {
             <div className="post-detail">
                 {postDetail ? (
                     <>
-                        <h1>게시물 제목</h1> {postDetail.title},
+                        <h1>게시물 제목</h1> {postDetail.title}
                         <h1>게시물 내용</h1> {postDetail.content}
+                        <h1>가격</h1> {postDetail.price}
+                        {postDetail.imageUrl && (
+                            <div>
+                                <h1>이미지</h1>
+                                <img
+                                    src={postDetail.imageUrl}
+                                    alt="게시물 이미지"
+                                    style={{
+                                        maxWidth: '100%',
+                                        height: 'auto',
+                                        marginTop: '10px'
+                                    }}
+                                />
+                                <h1>이미지 URL</h1> {postDetail.imageUrl}
+                            </div>
+
+                        )}
                     </>
+
                 ) : (
                     <p>게시물이 없습니다</p>
                 )}
