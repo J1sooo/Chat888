@@ -51,13 +51,14 @@ public ResponseEntity<?> createPost(
     public Optional<PostEntity> findPost(@PathVariable Integer id) {
         return postService.findPost(id);
     }
-@PutMapping("/modify/{id}")
-public ResponseEntity<PostEntity> modifyPost(
-    @PathVariable Integer id,
-    @RequestParam("title") String title,
-    @RequestParam("content") String content,
-    @RequestParam("price") Integer price,
-    @RequestParam(value = "file", required = false) MultipartFile file
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<PostEntity> modifyPost(
+        @PathVariable Integer id,
+        @RequestParam("title") String title,
+        @RequestParam("content") String content,
+        @RequestParam("price") Integer price,
+        @RequestParam(value = "file", required = false) MultipartFile file
 ) {
     try {
         PostEntity modifiedPost = postService.modifyPost(id, title, content, price, file);
@@ -66,5 +67,10 @@ public ResponseEntity<PostEntity> modifyPost(
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+    @GetMapping("/search")
+    public ResponseEntity<List<PostEntity>> searchPosts(@RequestParam("keyword") String keyword) {
+        List<PostEntity> searchResults = postService.searchPosts(keyword);
+        return ResponseEntity.ok(searchResults);
+    }
 }
 

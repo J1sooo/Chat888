@@ -69,4 +69,8 @@ public class PostService {
                 })
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다. id: " + id));
     }
+
+    public List<PostEntity> searchPosts(String keyword) {
+        return postRepository.searchByKeyword(keyword);
+    }
 }
