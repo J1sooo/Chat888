@@ -1,4 +1,4 @@
-package col.carrot.back.user.userlogin.controller;
+package col.carrot.back.user.userlogin.service;
 
 import col.carrot.back.user.userlogin.UserEntity;
 import col.carrot.back.user.userlogin.UserRepository;
@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/user")
-public class UserRestController {
-    private final Logger log = LoggerFactory.getLogger(UserRestController.class);
+public class UserService {
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
-    @PostMapping(path = "/login")
-    public ResponseData login(@RequestBody LoginData loginData, HttpSession session) {
+    public ResponseData login(LoginData loginData, HttpSession session) {
         String userId = loginData.getUserId();
         String password = loginData.getPassword();
         Optional<UserEntity> user = this.userRepository.findByUserId(userId);
@@ -40,18 +38,8 @@ public class UserRestController {
         return new ResponseData(true, "로그인 되었습니다");
     }
 
-    @PostMapping(path = "/join")
-    public ResponseData join(@RequestBody UserEntity userEntity, Errors errors) {
-        if (errors.hasErrors()) {
-            List<ObjectError> objErrs = errors.getAllErrors();
-            this.log.debug("Errors: " + errors);
-            this.log.debug("List<ObjectError>>: " + objErrs);
-            StringBuilder message = new StringBuilder();
-            for (ObjectError objErr : objErrs) {
-                message.append(objErr.getDefaultMessage()).append("\n");
-            }
-            return new ResponseData(false, message.toString().trim());
-        }
+    public ResponseData join(UserEntity userEntity) {
+
         boolean exists = this.userRepository.existsByUserId(userEntity.getUserId());
         if (exists) {
             return new ResponseData(false, "이미 존재하는 ID입니다.");
@@ -62,13 +50,11 @@ public class UserRestController {
         return new ResponseData(true, "회원가입에 성공하셨습니다!");
     }
 
-    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
         return "로그아웃 성공";
     }
 
-    @GetMapping("/checkLogin")
     public String checkLogin(HttpSession session) {
         return (String) session.getAttribute("userId");
     }
