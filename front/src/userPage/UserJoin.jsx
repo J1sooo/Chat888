@@ -1,14 +1,12 @@
 import {useState} from "react";
 import axios from "axios";
 
-function User() {
+function UserJoin() {
     const [userId, setUserId] = useState();
     const [userPw, setUserPw] = useState();
     const [userNickname, setUserNickname] = useState();
 
-
-
-    const handleClick = async (e) => {
+    const join = async (e) => {
         e.preventDefault();
 
         const postUserData = {
@@ -18,7 +16,7 @@ function User() {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/user/join', postUserData,
+            await axios.post('http://localhost:8080/user/join', postUserData,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -37,10 +35,10 @@ function User() {
                 <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
                 <input type="password" value={userPw} onChange={(e) => setUserPw(e.target.value)} />
                 <input type="text" value={userNickname} onChange={(e) => setUserNickname(e.target.value)} />
-                <button type="button" onClick={handleClick}>회원가입</button>
+                <button type="button" onClick={join}>회원가입</button>
             </form>
         </div>
     )
 }
 
-export default User;
+export default UserJoin;
