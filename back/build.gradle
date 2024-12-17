@@ -32,6 +32,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation platform('software.amazon.awssdk:bom:2.20.162')
 
