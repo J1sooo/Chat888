@@ -1,16 +1,17 @@
-package col.carrot.back.user.userlogin.data;
+package col.carrot.back.user.userlogin.domain.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseData {
-    private boolean success;
+public class LoginData {
 
-    private String msg;
+    private String userId;
+    private String password;
+
 }
-

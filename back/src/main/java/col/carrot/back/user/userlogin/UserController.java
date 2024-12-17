@@ -1,10 +1,8 @@
-package col.carrot.back.user.userlogin.controller;
+package col.carrot.back.user.userlogin;
 
-import col.carrot.back.user.userlogin.UserEntity;
-import col.carrot.back.user.userlogin.data.LoginData;
-import col.carrot.back.user.userlogin.data.ResponseData;
-import col.carrot.back.user.userlogin.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import col.carrot.back.user.userlogin.domain.data.LoginData;
+import col.carrot.back.user.userlogin.domain.data.ResponseData;
+import col.carrot.back.user.userlogin.domain.UserEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -17,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RequestMapping("/user")
 public class UserController {
     private final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -28,21 +26,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseData loginUser(@RequestBody LoginData loginData, HttpSession session){
+    public ResponseData loginUser(@RequestBody LoginData loginData, HttpSession session) {
         return userService.login(loginData, session);
     }
 
     @PostMapping("/join")
     public ResponseData saveUser(@RequestBody UserEntity userEntity, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             List<ObjectError> objErrs = errors.getAllErrors();
             this.log.debug("Errors: " + errors);
             this.log.debug("List<ObjectError>>: " + objErrs);
             StringBuilder message = new StringBuilder();
-            for(ObjectError objErr : objErrs) {
-                message.append(objErr.getDefaultMessage()).append("\n") ;
+            for (ObjectError objErr : objErrs) {
+                message.append(objErr.getDefaultMessage()).append("\n");
             }
-            return new ResponseData(false,message.toString().trim());
+            return new ResponseData(false, message.toString().trim());
         }
         return userService.join(userEntity);
     }

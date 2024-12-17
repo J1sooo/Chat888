@@ -1,4 +1,4 @@
-package col.carrot.back.user.userlogin;
+package col.carrot.back.user.userlogin.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

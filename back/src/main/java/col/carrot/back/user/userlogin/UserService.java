@@ -1,19 +1,15 @@
-package col.carrot.back.user.userlogin.service;
+package col.carrot.back.user.userlogin;
 
-import col.carrot.back.user.userlogin.UserEntity;
-import col.carrot.back.user.userlogin.UserRepository;
-import col.carrot.back.user.userlogin.data.LoginData;
-import col.carrot.back.user.userlogin.data.ResponseData;
+import col.carrot.back.user.userlogin.domain.data.LoginData;
+import col.carrot.back.user.userlogin.domain.data.ResponseData;
+import col.carrot.back.user.userlogin.domain.UserEntity;
+import col.carrot.back.user.userlogin.domain.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
