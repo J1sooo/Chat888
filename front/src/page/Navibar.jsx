@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaSearch } from 'react-icons/fa';
 
 function Navibar() {
     const styles = {
@@ -95,7 +94,6 @@ function Navibar() {
                             style={styles.searchInput}
                         />
                         <button style={styles.searchButton}>
-                            <FaSearch style={styles.searchIcon} />
                             <span>검색</span>
                         </button>
                     </div>
