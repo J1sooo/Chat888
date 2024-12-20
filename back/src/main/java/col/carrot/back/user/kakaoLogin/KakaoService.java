@@ -105,14 +105,14 @@ public class KakaoService {
                 userInfo.setKakao_account(account);
             }
 
-            // 사용자 정보 저장 로직 추가
-            UserEntity user = new UserEntity();
-            user.setId(userInfo.getId());
-            user.setNickname(userInfo.getKakao_account().getProfile().getNickname());
-
-            // 기존 사용자가 없을 경우에만 저장
-            userRepository.findById(user.getId())
-                    .orElseGet(() -> userRepository.save(user));
+//            // 사용자 정보 저장 로직 추가
+//            UserEntity user = new UserEntity();
+//            user.setId(userInfo.getId());
+//            user.setNickname(userInfo.getKakao_account().getProfile().getNickname());
+//
+//            // 기존 사용자가 없을 경우에만 저장
+//            userRepository.findById(user.getId())
+//                    .orElseGet(() -> userRepository.save(user));
 
             log.info(" [Kakao Service] User Info ------> {}", userInfo);
             return userInfo;
