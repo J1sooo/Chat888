@@ -13,7 +13,7 @@ function App() {
     <div>
         <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/" element={<UserJoin />} />
+            <Route path="/join" element={<UserJoin />} />
             <Route path="/login" element={<UserLogin />} />
             <Route path="/postDetail/:postId" element={<PostDetailPage />} />
             <Route path="/postModify/:postId" element={<PostModifyPage />} />
