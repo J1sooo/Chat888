@@ -1,10 +1,13 @@
 package col.carrot.back.post;
 
+import col.carrot.back.user.userlogin.domain.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -25,4 +28,9 @@ public class PostEntity {
     private String imageUrl;
 
     private Integer price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private UserEntity user;
 }

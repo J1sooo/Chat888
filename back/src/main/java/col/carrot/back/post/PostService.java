@@ -1,6 +1,8 @@
 package col.carrot.back.post;
 
-import lombok.RequiredArgsConstructor;
+import col.carrot.back.user.userlogin.domain.UserEntity;
+import col.carrot.back.user.userlogin.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,27 +10,38 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
 public class PostService {
     final private PostRepository postRepository;
     final private FileUploadService fileUploadService;
+    final private UserRepository userRepository;
 
-    public PostEntity createPost(String title, String content,Integer  price, MultipartFile file) throws IOException {
-    PostEntity post = new PostEntity();
-    post.setTitle(title);
-    post.setContent(content);
-    post.setPrice(price); 
-    post.setImageUrl(null);
-
-    if (file != null && !file.isEmpty()) {
-        String bucketName = "chat888";
-        String imageUrl = fileUploadService.uploadFile(file, bucketName);
-        post.setImageUrl(imageUrl);
+    @Autowired
+    public PostService(PostRepository postRepository, FileUploadService fileUploadService, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.fileUploadService = fileUploadService;
+        this.userRepository = userRepository;
     }
 
-    return postRepository.save(post);
-}
+    public PostEntity createPost(String title, String content, Integer price, MultipartFile file, String userId) throws IOException {
+        PostEntity post = new PostEntity();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setPrice(price);
+        post.setImageUrl(null);
+
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        post.setUser(user);
+
+        if (file != null && !file.isEmpty()) {
+            String bucketName = "chat888";
+            String imageUrl = fileUploadService.uploadFile(file, bucketName);
+            post.setImageUrl(imageUrl);
+        }
+
+        return postRepository.save(post);
+    }
 
     public List<PostEntity> allPost() {
         return postRepository.findAll();

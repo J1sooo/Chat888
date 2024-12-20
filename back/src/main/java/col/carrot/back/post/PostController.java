@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
@@ -19,20 +20,21 @@ public class PostController {
     final private FileUploadService fileUploadService;
 
     @PostMapping("/createPost")
-public ResponseEntity<?> createPost(
-        @RequestParam("title") String title,
-        @RequestParam("content") String content,
-        @RequestParam("price") Integer price,
-        @RequestParam(value = "file", required = false) MultipartFile file) {
-    try {
-        PostEntity savedPost = postService.createPost(title, content,price, file);
-        return ResponseEntity.ok(savedPost);
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("게시물 생성 실패: " + e.getMessage());
+    public ResponseEntity<?> createPost(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") Integer price,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("userId") String userId) {
+        try {
+            PostEntity savedPost = postService.createPost(title, content, price, file, userId);
+            return ResponseEntity.ok(savedPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("게시물 생성 실패: " + e.getMessage());
+        }
     }
-}
 
     @GetMapping("/postAll")
     public List<PostEntity> allPost() {
