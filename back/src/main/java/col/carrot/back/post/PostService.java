@@ -1,6 +1,6 @@
 package col.carrot.back.post;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,16 +8,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class PostService {
     final private PostRepository postRepository;
     final private FileUploadService fileUploadService;
-
-    @Autowired
-    public PostService(PostRepository postRepository, FileUploadService fileUploadService) {
-        this.postRepository = postRepository;
-        this.fileUploadService = fileUploadService;
-    }
 
     public PostEntity createPost(String title, String content,Integer  price, MultipartFile file) throws IOException {
     PostEntity post = new PostEntity();

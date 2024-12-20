@@ -1,5 +1,6 @@
 package col.carrot.back.post;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,17 +10,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("")
 public class PostController {
     final private PostService postService;
     final private FileUploadService fileUploadService;
-
-    public PostController(PostService postService, FileUploadService fileUploadService) {
-        this.postService = postService;
-        this.fileUploadService = fileUploadService;
-    }
 
     @PostMapping("/createPost")
 public ResponseEntity<?> createPost(
